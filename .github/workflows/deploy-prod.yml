@@ -22,6 +22,24 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Check app secrets
+        run: |
+          if [ -z "$VITE_SUPABASE_URL" ] || [ -z "$VITE_SUPABASE_ANON_KEY" ]; then
+            echo "::error::Missing VITE_SUPABASE_URL or VITE_SUPABASE_ANON_KEY secrets."
+            exit 1
+          fi
+
+          case "$VITE_SUPABASE_URL" in
+            http://*|https://*) ;;
+            *)
+              echo "::error::VITE_SUPABASE_URL must start with http:// or https://."
+              exit 1
+              ;;
+          esac
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+
       - name: Build
         run: npm run build
         env:
