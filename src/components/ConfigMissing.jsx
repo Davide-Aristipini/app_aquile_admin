@@ -3,12 +3,15 @@ export default function ConfigMissing() {
     <div className="login">
       <div className="login-card">
         <h2>Configurazione mancante</h2>
-        <p>Le variabili Supabase non sono state trovate.</p>
+        <p>Le variabili Supabase mancano o non sono valide.</p>
         <div style={{ marginTop: 12 }}>
           <code>VITE_SUPABASE_URL</code>
           <br />
           <code>VITE_SUPABASE_ANON_KEY</code>
         </div>
+        <p style={{ marginTop: 12 }}>
+          <code>VITE_SUPABASE_URL</code> deve iniziare con <code>https://</code>
+        </p>
         <p style={{ marginTop: 12 }}>
           Se fai deploy manuale, ricostruisci il progetto dopo aver creato il
           file <code>.env</code> e ricarica la cartella <code>dist</code>.
