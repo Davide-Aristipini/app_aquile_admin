@@ -75,7 +75,17 @@ jobs:
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
 
       - name: Deploy to Netlify
-        run: npx netlify-cli deploy --prod --dir=dist --site=$NETLIFY_SITE_ID --auth=$NETLIFY_AUTH_TOKEN
+        run: |
+          DEPLOY_JSON="$(npx netlify-cli deploy --prod --dir=dist --site=$NETLIFY_SITE_ID --auth=$NETLIFY_AUTH_TOKEN --json)"
+          DEPLOY_URL="$(echo "$DEPLOY_JSON" | node -e "let s='';process.stdin.on('data',d=>s+=d);process.stdin.on('end',()=>{const o=JSON.parse(s);process.stdout.write(o.url||'')})")"
+          DEPLOY_HOST="$(echo "$DEPLOY_URL" | sed -E 's#^https?://##' | sed -E 's#/.*$##')"
+
+          echo "Deployed URL: $DEPLOY_URL"
+
+          if [ "$DEPLOY_HOST" != "sq-aquile.netlify.app" ]; then
+            echo "::error::Deployment target mismatch. Expected sq-aquile.netlify.app, got $DEPLOY_HOST."
+            exit 1
+          fi
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
