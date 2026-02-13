@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;600;700&family=Bebas+Neue&display=swap');
+@import 'quill/dist/quill.snow.css';
 
 :root {
   color-scheme: light;
@@ -26,6 +27,18 @@ textarea,
 select,
 button {
   font-family: inherit;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+label {
+  display: grid;
+  gap: 6px;
 }
 
 .app-shell {
@@ -59,6 +72,10 @@ button {
   padding: 10px 12px;
   border-radius: 12px;
   background: rgba(255, 255, 255, 0.08);
+}
+
+.nav a.active {
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .content {
@@ -98,6 +115,11 @@ button {
   border-radius: 12px;
   font-weight: 600;
   cursor: pointer;
+}
+
+.button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
 }
 
 .button.secondary {
@@ -167,6 +189,10 @@ button {
   box-shadow: 0 8px 18px rgba(182, 54, 44, 0.14);
 }
 
+quill-editor {
+  display: block;
+}
+
 .ql-container {
   min-height: 320px;
 }
@@ -196,11 +222,6 @@ button {
 .editor-grid {
   display: grid;
   gap: 18px;
-}
-
-.quill {
-  background: #fff;
-  border-radius: 12px;
 }
 
 .usage-bar {
@@ -241,5 +262,9 @@ button {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+  }
+
+  .content {
+    padding: 24px;
   }
 }

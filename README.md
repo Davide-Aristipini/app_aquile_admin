@@ -4,28 +4,27 @@ Pannello web per creare e pubblicare articoli dell'app mobile App Aquile.
 
 ## Stack
 
-- React + Vite
+- Angular 19 (standalone components + router)
 - Supabase (`@supabase/supabase-js`)
-- Editor contenuti: `react-quill`
-- Deploy: Netlify (automatico da GitHub Actions su branch `prod`)
+- Editor contenuti: Quill (`ngx-quill`)
+- Deploy: Netlify (build diretto dal branch `prod`)
 
 ## Branch strategy
 
-- `main`: sviluppo e prove locali
-- `prod`: branch di produzione (deploy automatico)
+- `main`: sviluppo
+- `prod`: produzione
 
-Flusso:
+Flusso consigliato:
 
 1. lavori su `main`
-2. apri PR `main -> prod`
-3. GitHub Actions fa build di verifica sulla PR
-4. al merge su `prod`, parte deploy automatico su Netlify
+2. merge `main -> prod`
+3. Netlify esegue build e publish da `prod`
 
 ## Configurazione locale
 
 Requisiti:
 
-- Node.js `20.19+`
+- Node.js `20.19+` consigliato
 
 Comandi:
 
@@ -44,33 +43,23 @@ VITE_SUPABASE_URL=https://ivjtugjpxdvtjipaohuw.supabase.co
 VITE_SUPABASE_ANON_KEY=<SUPABASE_ANON_KEY>
 ```
 
+Nota: `npm run build` esegue `scripts/write-env.mjs`, che genera `src/environments/environment.ts` partendo da `.env` o dalle variabili d'ambiente della CI.
+
 ## Build produzione
 
 ```bash
 npm run build
 ```
 
-Output: `dist/`
+Output Angular: `dist/browser`
 
-## CI/CD (GitHub Actions)
+## Netlify
 
-Workflows inclusi:
+Configurazione inclusa in `netlify.toml`:
 
-- `.github/workflows/pr-build.yml`
-  - trigger: `pull_request` su branch `prod`
-  - esegue install + build
-- `.github/workflows/deploy-prod.yml`
-  - trigger: `push` su branch `prod`
-  - esegue build e deploy su Netlify
-
-## Secrets GitHub necessari
-
-Nel repository GitHub (Settings -> Secrets and variables -> Actions), aggiungere:
-
-- `VITE_SUPABASE_URL`
-- `VITE_SUPABASE_ANON_KEY`
-- `NETLIFY_AUTH_TOKEN`
-- `NETLIFY_SITE_ID`
+- build command: `npm run build`
+- publish directory: `dist/browser`
+- redirect SPA: `/* -> /index.html`
 
 ## Link utili
 

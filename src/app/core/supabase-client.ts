@@ -1,9 +1,11 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL?.trim();
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY?.trim();
+import { environment } from '../../environments/environment';
 
-function isValidHttpUrl(value) {
+const supabaseUrl = environment.supabaseUrl?.trim();
+const supabaseAnonKey = environment.supabaseAnonKey?.trim();
+
+function isValidHttpUrl(value: string | undefined): boolean {
   if (!value) return false;
   try {
     const parsed = new URL(value);
@@ -22,5 +24,5 @@ if (!isSupabaseConfigured) {
 }
 
 export const supabase = isSupabaseConfigured
-  ? createClient(supabaseUrl, supabaseAnonKey)
+  ? createClient(supabaseUrl as string, supabaseAnonKey as string)
   : null;
